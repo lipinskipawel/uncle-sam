@@ -1,4 +1,4 @@
-package org.example;
+package com.github.lipinskipawel;
 
 public enum Currency {
     USD,

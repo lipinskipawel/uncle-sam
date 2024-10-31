@@ -1,9 +1,9 @@
-package org.example;
+package com.github.lipinskipawel;
 
 import java.math.BigDecimal;
 
 import static java.util.Objects.requireNonNull;
-import static org.example.Cash.cash;
+import static com.github.lipinskipawel.Cash.cash;
 
 public final class CurrencyPair {
     private final Currency baseCurrency;
@@ -22,10 +22,10 @@ public final class CurrencyPair {
 
     Cash exchange(Cash cash) {
         if (cash.currency() == baseCurrency) {
-            return cash(cash.amount().multiply(quote).toString(), quotedCurrency);
+            return Cash.cash(cash.amount().multiply(quote).toString(), quotedCurrency);
         }
         if (cash.currency() == quotedCurrency) {
-            return cash(cash.amount().multiply(inverted().quote).toString(), baseCurrency);
+            return Cash.cash(cash.amount().multiply(inverted().quote).toString(), baseCurrency);
         }
         throw new RuntimeException("Cash currency [%s] does not match currency pair [%s]".formatted(cash.currency(), this));
     }

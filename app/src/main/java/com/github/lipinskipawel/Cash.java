@@ -1,4 +1,4 @@
-package org.example;
+package com.github.lipinskipawel;
 
 import java.math.BigDecimal;
 import java.util.Objects;
