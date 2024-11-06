@@ -6,32 +6,36 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 
 import static com.github.lipinskipawel.Cash.cash;
+import static com.github.lipinskipawel.Currency.JPY;
+import static com.github.lipinskipawel.Currency.PLN;
+import static com.github.lipinskipawel.Currency.USD;
+import static com.github.lipinskipawel.CurrencyPair.currencyPair;
 
 class CurrencyPairTest implements WithAssertions {
 
     @Test
     void exchange_using_quoted_currency_correctly() {
-        var usdPln = CurrencyPair.currencyPair(Currency.USD, BigDecimal.valueOf(4), Currency.PLN);
+        var usdPln = currencyPair(USD, BigDecimal.valueOf(4), PLN);
 
-        var plnCash = usdPln.exchange(Cash.cash(100, Currency.USD));
+        var plnCash = usdPln.exchange(cash(100, USD));
 
-        assertThat(plnCash).isEqualTo(Cash.cash(400, Currency.PLN));
+        assertThat(plnCash).isEqualTo(cash(400, PLN));
     }
 
     @Test
     void exchange_using_base_currency_correctly() {
-        var plnUsd = CurrencyPair.currencyPair(Currency.PLN, BigDecimal.valueOf(25, 2), Currency.USD);
+        var plnUsd = currencyPair(PLN, BigDecimal.valueOf(25, 2), USD);
 
-        var plnCash = plnUsd.exchange(Cash.cash(100, Currency.USD));
+        var plnCash = plnUsd.exchange(cash(100, USD));
 
-        assertThat(plnCash).isEqualTo(Cash.cash(400, Currency.PLN));
+        assertThat(plnCash).isEqualTo(cash(400, PLN));
     }
 
     @Test
     void throws_when_cash_currency_does_not_match_currency_of_currency_pair() {
-        var plnUsd = CurrencyPair.currencyPair(Currency.USD, BigDecimal.valueOf(4), Currency.PLN);
+        var plnUsd = currencyPair(USD, BigDecimal.valueOf(4), PLN);
 
-        var runtimeException = catchRuntimeException(() -> plnUsd.exchange(Cash.cash(100, Currency.JPY)));
+        var runtimeException = catchRuntimeException(() -> plnUsd.exchange(cash(100, JPY)));
 
         assertThat(runtimeException)
             .hasMessage("Cash currency [JPY] does not match currency pair [CurrencyPair{baseCurrency=USD, quote=4, quotedCurrency=PLN}]");

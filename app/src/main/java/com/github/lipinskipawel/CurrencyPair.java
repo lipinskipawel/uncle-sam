@@ -2,8 +2,9 @@ package com.github.lipinskipawel;
 
 import java.math.BigDecimal;
 
+import static java.math.BigDecimal.ONE;
+import static java.math.MathContext.DECIMAL64;
 import static java.util.Objects.requireNonNull;
-import static com.github.lipinskipawel.Cash.cash;
 
 public final class CurrencyPair {
     private final Currency baseCurrency;
@@ -16,11 +17,11 @@ public final class CurrencyPair {
         this.quotedCurrency = requireNonNull(quoteCurrency);
     }
 
-    static CurrencyPair currencyPair(Currency baseCurrency, BigDecimal quote, Currency quoteCurrency) {
+    public static CurrencyPair currencyPair(Currency baseCurrency, BigDecimal quote, Currency quoteCurrency) {
         return new CurrencyPair(baseCurrency, quote, quoteCurrency);
     }
 
-    Cash exchange(Cash cash) {
+    public Cash exchange(Cash cash) {
         if (cash.currency() == baseCurrency) {
             return Cash.cash(cash.amount().multiply(quote).toString(), quotedCurrency);
         }
@@ -31,7 +32,7 @@ public final class CurrencyPair {
     }
 
     CurrencyPair inverted() {
-        return new CurrencyPair(quotedCurrency, BigDecimal.ONE.divide(quote), baseCurrency);
+        return new CurrencyPair(quotedCurrency, ONE.divide(quote, DECIMAL64), baseCurrency);
     }
 
     @Override
