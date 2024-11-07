@@ -21,7 +21,7 @@ class AssetEvaluatorTest implements WithAssertions {
         final var transactions = List.of(buyTransaction()
             .price(cash("104.4", USD))
             .volume(21)
-            .transactionDate(LocalDate.of(2024, 7, 3))
+            .localDate(LocalDate.of(2024, 7, 3))
             .fxRate(currencyPair(PLN, new BigDecimal("4.0375"), USD))
             .build()
         );
@@ -40,13 +40,13 @@ class AssetEvaluatorTest implements WithAssertions {
             buyTransaction()
                 .price(cash("104.4", USD))
                 .volume(21)
-                .transactionDate(LocalDate.of(2024, 7, 3))
+                .localDate(LocalDate.of(2024, 7, 3))
                 .fxRate(currencyPair(PLN, new BigDecimal("4.0375"), USD))
                 .build(),
             buyTransaction()
                 .price(cash(104, USD))
                 .volume(9)
-                .transactionDate(LocalDate.of(2024, 7, 24))
+                .localDate(LocalDate.of(2024, 7, 24))
                 .fxRate(currencyPair(PLN, new BigDecimal("3.9355"), USD))
                 .build()
         );

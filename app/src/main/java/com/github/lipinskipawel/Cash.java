@@ -38,7 +38,8 @@ public final class Cash {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Cash cash = (Cash) o;
-        return Objects.equals(amount, cash.amount) && currency == cash.currency;
+        return Objects.equals(amount, cash.amount)
+            && currency == cash.currency;
     }
 
     @Override

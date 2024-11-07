@@ -1,13 +1,17 @@
 package com.github.lipinskipawel.broker;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.github.lipinskipawel.Cash;
 import com.github.lipinskipawel.CurrencyPair;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 import static com.github.lipinskipawel.broker.Type.BUY;
 import static java.util.Objects.requireNonNull;
 
+@JsonDeserialize(builder = Transaction.Builder.class)
 public final class Transaction {
     private final Type type;
     private final LocalDate localDate;
@@ -43,6 +47,35 @@ public final class Transaction {
         return fxRate;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Transaction that = (Transaction) o;
+        return volume == that.volume
+            && type == that.type
+            && Objects.equals(localDate, that.localDate)
+            && Objects.equals(price, that.price)
+            && Objects.equals(fxRate, that.fxRate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, localDate, price, volume, fxRate);
+    }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+            "type=" + type +
+            ", localDate=" + localDate +
+            ", price=" + price +
+            ", volume=" + volume +
+            ", fxRate=" + fxRate +
+            '}';
+    }
+
+    @JsonPOJOBuilder(withPrefix = "")
     public static class Builder {
         private Type type;
         private LocalDate localDate;
@@ -66,7 +99,7 @@ public final class Transaction {
             return this;
         }
 
-        public Builder transactionDate(LocalDate localDate) {
+        public Builder localDate(LocalDate localDate) {
             this.localDate = localDate;
             return this;
         }

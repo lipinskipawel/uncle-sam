@@ -1,6 +1,7 @@
 package com.github.lipinskipawel;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import static java.math.BigDecimal.ONE;
 import static java.math.MathContext.DECIMAL64;
@@ -33,6 +34,21 @@ public final class CurrencyPair {
 
     CurrencyPair inverted() {
         return new CurrencyPair(quotedCurrency, ONE.divide(quote, DECIMAL64), baseCurrency);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CurrencyPair that = (CurrencyPair) o;
+        return baseCurrency == that.baseCurrency
+            && Objects.equals(quote, that.quote)
+            && quotedCurrency == that.quotedCurrency;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(baseCurrency, quote, quotedCurrency);
     }
 
     @Override
