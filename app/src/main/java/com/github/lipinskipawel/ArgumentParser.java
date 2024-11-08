@@ -1,15 +1,16 @@
 package com.github.lipinskipawel;
 
-import java.util.Arrays;
 import java.util.Optional;
 
+import static java.util.Arrays.stream;
 import static java.util.Objects.requireNonNull;
 
 public final class ArgumentParser {
     private final String[] args;
 
     public enum Flag {
-        TRANSACTION_PATH("transactions=");
+        TRANSACTION_PATH("transactions="),
+        PRICE("assetPrice=");
 
         private final String flag;
 
@@ -22,9 +23,8 @@ public final class ArgumentParser {
         this.args = requireNonNull(args);
     }
 
-
     public Optional<String> findValue(Flag flag) {
-        return Arrays.stream(args)
+        return stream(args)
             .filter(it -> it.startsWith(flag.flag))
             .map(it -> it.split("=")[1])
             .map(Optional::ofNullable)
