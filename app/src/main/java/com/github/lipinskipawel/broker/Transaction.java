@@ -1,7 +1,5 @@
 package com.github.lipinskipawel.broker;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.github.lipinskipawel.Cash;
 import com.github.lipinskipawel.CurrencyPair;
 
@@ -11,7 +9,6 @@ import java.util.Objects;
 import static com.github.lipinskipawel.broker.Type.BUY;
 import static java.util.Objects.requireNonNull;
 
-@JsonDeserialize(builder = Transaction.Builder.class)
 public final class Transaction {
     private final Type type;
     private final LocalDate localDate;
@@ -75,7 +72,6 @@ public final class Transaction {
             '}';
     }
 
-    @JsonPOJOBuilder(withPrefix = "")
     public static class Builder {
         private Type type;
         private LocalDate localDate;

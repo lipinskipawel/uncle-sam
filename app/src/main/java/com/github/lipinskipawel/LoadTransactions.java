@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.github.lipinskipawel.broker.Transaction;
-import com.github.lipinskipawel.broker.Type;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -15,10 +14,13 @@ import java.util.List;
 
 import static com.fasterxml.jackson.dataformat.csv.CsvSchema.ColumnType.NUMBER;
 import static com.fasterxml.jackson.dataformat.csv.CsvSchema.builder;
+import static com.github.lipinskipawel.Cash.cash;
 import static com.github.lipinskipawel.Currency.PLN;
 import static com.github.lipinskipawel.Currency.USD;
+import static com.github.lipinskipawel.Currency.currency;
 import static com.github.lipinskipawel.CurrencyPair.currencyPair;
 import static com.github.lipinskipawel.broker.Transaction.Builder.transaction;
+import static com.github.lipinskipawel.broker.Type.type;
 import static java.util.Objects.requireNonNull;
 
 public final class LoadTransactions {
@@ -52,9 +54,9 @@ public final class LoadTransactions {
             while (parsed.hasNextValue()) {
                 final var csv = parsed.nextValue();
                 result.add(transaction()
-                    .type(Type.valueOf(csv.type))
+                    .type(type(csv.type))
                     .localDate(LocalDate.parse(csv.date))
-                    .price(Cash.cash(csv.price, Currency.valueOf(csv.currency)))
+                    .price(cash(csv.price, currency(csv.currency)))
                     .volume(csv.volume)
                     .fxRate(currencyPair(USD, new BigDecimal(csv.fxRate), PLN))
                     .build());
