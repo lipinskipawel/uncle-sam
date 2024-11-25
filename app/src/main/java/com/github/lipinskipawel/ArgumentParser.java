@@ -10,7 +10,8 @@ public final class ArgumentParser {
 
     public enum Flag {
         TRANSACTION_PATH("transactions="),
-        PRICE("assetPrice=");
+        PRICE("assetPrice="),
+        USD_PLN("usd/pln=");
 
         private final String flag;
 

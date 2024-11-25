@@ -2,12 +2,16 @@ package com.github.lipinskipawel;
 
 import com.github.lipinskipawel.evaluation.AssetEvaluator;
 
+import java.math.BigDecimal;
 import java.nio.file.Path;
 
 import static com.github.lipinskipawel.ArgumentParser.Flag.PRICE;
 import static com.github.lipinskipawel.ArgumentParser.Flag.TRANSACTION_PATH;
+import static com.github.lipinskipawel.ArgumentParser.Flag.USD_PLN;
 import static com.github.lipinskipawel.Cash.cash;
+import static com.github.lipinskipawel.Currency.PLN;
 import static com.github.lipinskipawel.Currency.USD;
+import static com.github.lipinskipawel.CurrencyPair.currencyPair;
 
 public final class Application {
 
@@ -25,5 +29,11 @@ public final class Application {
             .orElse(cash(100, USD));
         final var cash = assetEvaluator.evaluate(currentAssetPrice);
         System.out.println(cash);
+
+        final var inPln = parser.findValue(USD_PLN)
+            .map(it -> currencyPair(USD, new BigDecimal(it), PLN))
+            .map(it -> it.exchange(cash))
+            .orElseGet(() -> currencyPair(USD, new BigDecimal(4), PLN).exchange(cash));
+        System.out.println(inPln);
     }
 }

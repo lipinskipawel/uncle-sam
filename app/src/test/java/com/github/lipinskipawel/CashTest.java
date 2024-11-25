@@ -10,10 +10,10 @@ final class CashTest implements WithAssertions {
     @Test
     void multiply_correctly() {
         var volume = 300;
-        var pricePerShare = Cash.cash(100, Currency.USD);
+        var pricePerShare = cash(100, Currency.USD);
 
         var assetValue = pricePerShare.multiply(volume);
 
-        assertThat(assetValue).isEqualTo(Cash.cash(30_000, Currency.USD));
+        assertThat(assetValue).isEqualTo(cash(30_000, Currency.USD));
     }
 }
