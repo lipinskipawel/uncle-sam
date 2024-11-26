@@ -12,38 +12,28 @@ import static com.github.lipinskipawel.Currency.PLN;
 import static com.github.lipinskipawel.Currency.USD;
 import static com.github.lipinskipawel.CurrencyPair.currencyPair;
 import static com.github.lipinskipawel.broker.Transaction.Builder.buyTransaction;
+import static com.github.lipinskipawel.broker.Transaction.Builder.transaction;
+import static com.github.lipinskipawel.broker.Type.SELL;
 
 class AssetEvaluatorTest implements WithAssertions {
 
     @Test
-    void evaluate_one_transaction_when_price_did_not_move() {
-        final var usdPln = currencyPair(USD, new BigDecimal("4.0375"), PLN);
-        final var transactions = List.of(buyTransaction()
-            .price(cash("104.4", USD))
-            .volume(21)
-            .localDate(LocalDate.of(2024, 7, 3))
-            .fxRate(currencyPair(PLN, new BigDecimal("4.0375"), USD))
-            .build()
-        );
-        final var portfolioEvaluation = new AssetEvaluator(transactions);
-
-        final var cash = portfolioEvaluation.evaluate(cash("104.4", USD));
-
-        assertThat(cash).isEqualTo(cash("2192.4", USD));
-        assertThat(usdPln.exchange(cash)).isEqualTo(cash("8851.81500", PLN));
-    }
-
-    @Test
-    void evaluate_two_transactions_when_price_declined() {
-        final var usdPln = currencyPair(PLN, new BigDecimal("4.02"), USD);
+    void counts_number_of_shares_including_transaction_type() {
         final var transactions = List.of(
             buyTransaction()
-                .price(cash("104.4", USD))
+                .price(cash("105", USD))
                 .volume(21)
                 .localDate(LocalDate.of(2024, 7, 3))
-                .fxRate(currencyPair(PLN, new BigDecimal("4.0375"), USD))
+                .fxRate(currencyPair(PLN, new BigDecimal("4.00"), USD))
                 .build(),
             buyTransaction()
+                .price(cash(104, USD))
+                .volume(9)
+                .localDate(LocalDate.of(2024, 7, 24))
+                .fxRate(currencyPair(PLN, new BigDecimal("3.9355"), USD))
+                .build(),
+            transaction()
+                .type(SELL)
                 .price(cash(104, USD))
                 .volume(9)
                 .localDate(LocalDate.of(2024, 7, 24))
@@ -52,8 +42,8 @@ class AssetEvaluatorTest implements WithAssertions {
         );
         final var portfolioEvaluation = new AssetEvaluator(transactions);
 
-        final var cash = portfolioEvaluation.evaluate(cash(100, USD));
-        assertThat(cash).isEqualTo(cash("3000", USD));
-        assertThat(usdPln.exchange(cash)).isEqualTo(cash("746.2686567164178000", PLN));
+        final var numberOfShares = portfolioEvaluation.numberOfShares();
+
+        assertThat(numberOfShares).isEqualTo(21);
     }
 }

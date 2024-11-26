@@ -1,10 +1,10 @@
 package com.github.lipinskipawel.evaluation;
 
-import com.github.lipinskipawel.Cash;
 import com.github.lipinskipawel.broker.Transaction;
 
 import java.util.List;
 
+import static com.github.lipinskipawel.broker.Type.BUY;
 import static java.util.Objects.requireNonNull;
 
 public final class AssetEvaluator {
@@ -14,10 +14,16 @@ public final class AssetEvaluator {
         this.transactions = requireNonNull(transactions);
     }
 
-    public Cash evaluate(Cash pricePerShare) {
-        final var numberOfShares = transactions.stream()
-            .mapToInt(Transaction::volume)
-            .sum();
-        return pricePerShare.multiply(numberOfShares);
+    public int numberOfShares() {
+        return transactions
+            .stream()
+            .reduce(0, this::countShares, Integer::sum);
+    }
+
+    private int countShares(int acc, Transaction txn) {
+        if (txn.type() == BUY) {
+            return acc + txn.volume();
+        }
+        return acc - txn.volume();
     }
 }

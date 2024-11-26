@@ -23,17 +23,17 @@ public final class Application {
         final var loadTransactions = new LoadTransactions(transactionPath);
 
         final var assetEvaluator = new AssetEvaluator(loadTransactions.loadTransactions());
+        final var numberOfShares = assetEvaluator.numberOfShares();
 
         final var currentAssetPrice = parser.findValue(PRICE)
             .map(it -> cash(it, USD))
             .orElse(cash(100, USD));
-        final var cash = assetEvaluator.evaluate(currentAssetPrice);
-        System.out.println(cash);
+        System.out.println(currentAssetPrice.multiply(numberOfShares));
 
         final var inPln = parser.findValue(USD_PLN)
             .map(it -> currencyPair(USD, new BigDecimal(it), PLN))
-            .map(it -> it.exchange(cash))
-            .orElseGet(() -> currencyPair(USD, new BigDecimal(4), PLN).exchange(cash));
+            .map(it -> it.exchange(currentAssetPrice.multiply(numberOfShares)))
+            .orElseGet(() -> currencyPair(USD, new BigDecimal(4), PLN).exchange(currentAssetPrice.multiply(numberOfShares)));
         System.out.println(inPln);
     }
 }
