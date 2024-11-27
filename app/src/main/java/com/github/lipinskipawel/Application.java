@@ -1,6 +1,7 @@
 package com.github.lipinskipawel;
 
 import com.github.lipinskipawel.evaluation.AssetEvaluator;
+import com.github.lipinskipawel.nbp.NbpClient;
 
 import java.math.BigDecimal;
 import java.nio.file.Path;
@@ -14,6 +15,8 @@ import static com.github.lipinskipawel.Currency.USD;
 import static com.github.lipinskipawel.CurrencyPair.currencyPair;
 
 public final class Application {
+
+    private static final NbpClient nbpClient = new NbpClient();
 
     public static void main(String[] args) {
         final var parser = new ArgumentParser(args);
@@ -30,10 +33,11 @@ public final class Application {
             .orElse(cash(100, USD));
         System.out.println(currentAssetPrice.multiply(numberOfShares));
 
+        final var mid = nbpClient.currentUsdPln().body().rates().get(0).mid();
         final var inPln = parser.findValue(USD_PLN)
             .map(it -> currencyPair(USD, new BigDecimal(it), PLN))
             .map(it -> it.exchange(currentAssetPrice.multiply(numberOfShares)))
-            .orElseGet(() -> currencyPair(USD, new BigDecimal(4), PLN).exchange(currentAssetPrice.multiply(numberOfShares)));
+            .orElseGet(() -> currencyPair(USD, mid, PLN).exchange(currentAssetPrice.multiply(numberOfShares)));
         System.out.println(inPln);
     }
 }
