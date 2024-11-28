@@ -20,9 +20,13 @@ public final class Application {
 
     public static void main(String[] args) {
         final var parser = new ArgumentParser(args);
-        final var transactionPath = parser.findValue(TRANSACTION_PATH)
-            .map(Path::of)
-            .orElseThrow();
+
+        final var fileStorage = new FileStorage();
+
+        final var transactionPath = fileStorage.transactions()
+            .or(() -> parser.findValue(TRANSACTION_PATH)
+                .map(Path::of))
+            .orElseThrow(() -> new RuntimeException("Path to transactions have not been specified"));
         final var loadTransactions = new LoadTransactions(transactionPath);
 
         final var assetEvaluator = new AssetEvaluator(loadTransactions.loadTransactions());
