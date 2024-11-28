@@ -12,6 +12,7 @@ public final class FileStorage {
         return ofNullable(getenv("HOME"))
             .map(Path::of)
             .map(path -> path.resolve(".config"))
+            .map(path -> path.resolve("uncle-sam"))
             .map(path -> path.resolve("exchange"))
             .map(path -> path.resolve("vuaa.uk.txt"))
             .filter(path -> path.toFile().exists() && path.toFile().isFile());

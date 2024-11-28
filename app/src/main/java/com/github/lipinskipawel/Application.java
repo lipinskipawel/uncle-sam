@@ -2,6 +2,7 @@ package com.github.lipinskipawel;
 
 import com.github.lipinskipawel.evaluation.AssetEvaluator;
 import com.github.lipinskipawel.nbp.NbpClient;
+import com.github.lipinskipawel.rates.UsdPlnRate;
 
 import java.math.BigDecimal;
 import java.nio.file.Path;
@@ -16,12 +17,11 @@ import static com.github.lipinskipawel.CurrencyPair.currencyPair;
 
 public final class Application {
 
-    private static final NbpClient nbpClient = new NbpClient();
-
     public static void main(String[] args) {
         final var parser = new ArgumentParser(args);
 
         final var fileStorage = new FileStorage();
+        final var usdPlnRate = new UsdPlnRate(new NbpClient());
 
         final var transactionPath = fileStorage.transactions()
             .or(() -> parser.findValue(TRANSACTION_PATH)
@@ -37,11 +37,10 @@ public final class Application {
             .orElse(cash(100, USD));
         System.out.println(currentAssetPrice.multiply(numberOfShares));
 
-        final var mid = nbpClient.currentUsdPln().body().rates().get(0).mid();
         final var inPln = parser.findValue(USD_PLN)
             .map(it -> currencyPair(USD, new BigDecimal(it), PLN))
             .map(it -> it.exchange(currentAssetPrice.multiply(numberOfShares)))
-            .orElseGet(() -> currencyPair(USD, mid, PLN).exchange(currentAssetPrice.multiply(numberOfShares)));
+            .orElseGet(() -> currencyPair(USD, usdPlnRate.currentUsdPln(), PLN).exchange(currentAssetPrice.multiply(numberOfShares)));
         System.out.println(inPln);
     }
 }
