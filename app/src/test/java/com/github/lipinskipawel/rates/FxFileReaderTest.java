@@ -2,6 +2,8 @@ package com.github.lipinskipawel.rates;
 
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -81,6 +83,18 @@ class FxFileReaderTest implements WithAssertions {
         final var fxFileReader = new FxFileReader(file.toAbsolutePath());
 
         final var bigDecimal = fxFileReader.usdPlnRate(date.minusDays(3));
+
+        assertThat(bigDecimal).isEmpty();
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {3, 4, 10})
+    void not_read_entire_fx_rate_file_when_requested_date_is_more_than_2_days_in_the_future_compared_to_last_entry(int daysInTheFuture) {
+        final var date = LocalDate.of(2024, 1, 1);
+        final var file = createFileWithContent(date + ",4.3");
+        final var fxFileReader = new FxFileReader(file.toAbsolutePath());
+
+        final var bigDecimal = fxFileReader.usdPlnRate(date.plusDays(daysInTheFuture));
 
         assertThat(bigDecimal).isEmpty();
     }

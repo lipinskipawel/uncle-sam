@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import static java.nio.file.Files.newBufferedReader;
+import static java.time.temporal.ChronoUnit.DAYS;
 import static java.util.Objects.requireNonNull;
 import static java.util.Optional.empty;
 
@@ -26,6 +27,9 @@ final class FxFileReader {
         try (final var reader = newBufferedReader(fxPath)) {
             var fxRate = parseToFxRate(reader);
             if (fxRate.isEmpty()) {
+                return empty();
+            }
+            if (isInFutureMoreThan2Days(fxRate.get().date, requestedDate)) {
                 return empty();
             }
 
@@ -51,6 +55,11 @@ final class FxFileReader {
             case SUNDAY -> requestedDate.minusDays(2).equals(fxRate.date);
             default -> false;
         };
+    }
+
+    private boolean isInFutureMoreThan2Days(LocalDate date, LocalDate inTheFuture) {
+        return date.isBefore(inTheFuture)
+            && DAYS.between(date, inTheFuture) > 2;
     }
 
     private Optional<FxRate> parseToFxRate(BufferedReader bufferedReader) throws IOException {
