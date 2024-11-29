@@ -15,6 +15,7 @@ dependencies {
 
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.assertj)
+    testImplementation(libs.mockito)
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 

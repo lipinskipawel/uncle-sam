@@ -27,14 +27,14 @@ public final class NbpClient {
         this.mapper = createMapper();
     }
 
-    public HttpResponse<NbpResponse> currentUsdPln() {
+    public NbpResponse currentUsdPln() {
         final var usdCurrentRate = HttpRequest.newBuilder()
             .uri(URI.create("https://api.nbp.pl/api/exchangerates/rates/a/usd"))
             .GET()
             .header("Accept", "application/json")
             .build();
         try {
-            return nbpClient.send(usdCurrentRate, new CustomHandler());
+            return nbpClient.send(usdCurrentRate, new CustomHandler()).body();
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }

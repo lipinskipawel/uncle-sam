@@ -26,6 +26,7 @@ public record NbpResponse(
     public record Rate(
         String no,
         LocalDate effectiveDate,
+        // todo, this is 4 decimal places. 4.077 must be understood as 4.0770
         BigDecimal mid
     ) {
 
