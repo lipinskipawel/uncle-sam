@@ -44,6 +44,34 @@ class FxFileReaderTest implements WithAssertions {
     }
 
     @Test
+    void read_fx_rate_when_requested_date_is_saturday() {
+        final var date = LocalDate.of(2024, 11, 29);
+        final var file = createFileWithContent(date + ",4.3");
+        final var fxFileReader = new FxFileReader(file.toAbsolutePath());
+
+        final var bigDecimal = fxFileReader.usdPlnRate(date.plusDays(1));
+
+        assertThat(bigDecimal)
+            .isPresent()
+            .get()
+            .isEqualTo(new BigDecimal("4.3"));
+    }
+
+    @Test
+    void read_fx_rate_when_requested_date_is_sunday() {
+        final var date = LocalDate.of(2024, 11, 29);
+        final var file = createFileWithContent(date + ",4.3");
+        final var fxFileReader = new FxFileReader(file.toAbsolutePath());
+
+        final var bigDecimal = fxFileReader.usdPlnRate(date.plusDays(2));
+
+        assertThat(bigDecimal)
+            .isPresent()
+            .get()
+            .isEqualTo(new BigDecimal("4.3"));
+    }
+
+    @Test
     void not_read_fx_rate_when_requested_date_is_before_last_recorded_rate() {
         final var date = LocalDate.of(2024, 1, 5);
         final var file = createFileWithContent("""

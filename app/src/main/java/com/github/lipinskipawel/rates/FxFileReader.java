@@ -22,14 +22,14 @@ final class FxFileReader {
         this.fxPath = requireNonNull(fxPath);
     }
 
-    Optional<BigDecimal> usdPlnRate(LocalDate date) {
+    Optional<BigDecimal> usdPlnRate(LocalDate requestedDate) {
         try (final var reader = newBufferedReader(fxPath)) {
             var fxRate = parseToFxRate(reader);
             if (fxRate.isEmpty()) {
                 return empty();
             }
 
-            while (!fxRate.get().date.equals(date)) {
+            while (!matchedDates(fxRate.get(), requestedDate)) {
                 fxRate = parseToFxRate(reader);
                 if (fxRate.isEmpty()) {
                     return empty();
@@ -40,6 +40,17 @@ final class FxFileReader {
         } catch (IOException e) {
             return empty();
         }
+    }
+
+    private boolean matchedDates(FxRate fxRate, LocalDate requestedDate) {
+        if (fxRate.date.equals(requestedDate)) {
+            return true;
+        }
+        return switch (requestedDate.getDayOfWeek()) {
+            case SATURDAY -> requestedDate.minusDays(1).equals(fxRate.date);
+            case SUNDAY -> requestedDate.minusDays(2).equals(fxRate.date);
+            default -> false;
+        };
     }
 
     private Optional<FxRate> parseToFxRate(BufferedReader bufferedReader) throws IOException {
