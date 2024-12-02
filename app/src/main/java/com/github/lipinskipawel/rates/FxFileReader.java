@@ -8,6 +8,8 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import static java.nio.file.Files.newBufferedReader;
+import static java.time.DayOfWeek.SATURDAY;
+import static java.time.DayOfWeek.SUNDAY;
 import static java.time.temporal.ChronoUnit.DAYS;
 import static java.util.Objects.requireNonNull;
 import static java.util.Optional.empty;
@@ -33,6 +35,14 @@ final class FxFileReader {
                 return empty();
             }
 
+            if (isFarBackInTime(fxRate.get().date, requestedDate)) {
+                skipParsing(requestedDate, fxRate.get().date, reader);
+                fxRate = parseToFxRate(reader);
+                if (fxRate.isEmpty()) {
+                    return empty();
+                }
+            }
+
             while (!matchedDates(fxRate.get(), requestedDate)) {
                 fxRate = parseToFxRate(reader);
                 if (fxRate.isEmpty()) {
@@ -46,6 +56,33 @@ final class FxFileReader {
         }
     }
 
+    private boolean isInFutureMoreThan2Days(LocalDate date, LocalDate inTheFuture) {
+        return date.isBefore(inTheFuture)
+            && DAYS.between(date, inTheFuture) > 2;
+    }
+
+    private boolean isFarBackInTime(LocalDate date, LocalDate backInTime) {
+        return backInTime.isBefore(date)
+            && DAYS.between(backInTime, date) > 10;
+    }
+
+    private void skipParsing(LocalDate requestedDate, LocalDate date, BufferedReader reader) throws IOException {
+        final var daysBetween = DAYS.between(requestedDate, date);
+        final var weekendDays = weekendsDays(requestedDate, date);
+
+        final var entriesToSkip = daysBetween - weekendDays - 2;
+
+        for (var i = 0; i < entriesToSkip; i++) {
+            reader.readLine();
+        }
+    }
+
+    long weekendsDays(LocalDate precedeDate, LocalDate date) {
+        return precedeDate.datesUntil(date)
+            .filter(it -> it.getDayOfWeek() == SATURDAY || it.getDayOfWeek() == SUNDAY)
+            .count();
+    }
+
     private boolean matchedDates(FxRate fxRate, LocalDate requestedDate) {
         if (fxRate.date.equals(requestedDate)) {
             return true;
@@ -55,11 +92,6 @@ final class FxFileReader {
             case SUNDAY -> requestedDate.minusDays(2).equals(fxRate.date);
             default -> false;
         };
-    }
-
-    private boolean isInFutureMoreThan2Days(LocalDate date, LocalDate inTheFuture) {
-        return date.isBefore(inTheFuture)
-            && DAYS.between(date, inTheFuture) > 2;
     }
 
     private Optional<FxRate> parseToFxRate(BufferedReader bufferedReader) throws IOException {
