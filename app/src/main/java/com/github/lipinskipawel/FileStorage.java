@@ -17,4 +17,15 @@ public final class FileStorage {
             .map(path -> path.resolve("vuaa.uk.txt"))
             .filter(path -> path.toFile().exists() && path.toFile().isFile());
     }
+
+    public Path usdPlnPath() {
+        return ofNullable(getenv("HOME"))
+            .or(() -> Optional.of("/"))
+            .map(Path::of)
+            .map(path -> path.resolve(".config"))
+            .map(path -> path.resolve("uncle-sam"))
+            .map(path -> path.resolve("rates"))
+            .map(path -> path.resolve("usdPln.txt"))
+            .orElseThrow();
+    }
 }

@@ -6,6 +6,7 @@ import com.github.lipinskipawel.rates.UsdPlnRate;
 
 import java.math.BigDecimal;
 import java.nio.file.Path;
+import java.time.LocalDate;
 
 import static com.github.lipinskipawel.ArgumentParser.Flag.PRICE;
 import static com.github.lipinskipawel.ArgumentParser.Flag.TRANSACTION_PATH;
@@ -21,7 +22,7 @@ public final class Application {
         final var parser = new ArgumentParser(args);
 
         final var fileStorage = new FileStorage();
-        final var usdPlnRate = new UsdPlnRate(new NbpClient());
+        final var usdPlnRate = new UsdPlnRate(new NbpClient(), fileStorage.usdPlnPath(), LocalDate::now);
 
         final var transactionPath = fileStorage.transactions()
             .or(() -> parser.findValue(TRANSACTION_PATH)
