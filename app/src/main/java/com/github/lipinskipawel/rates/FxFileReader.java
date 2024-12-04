@@ -31,11 +31,11 @@ final class FxFileReader {
             if (fxRate.isEmpty()) {
                 return empty();
             }
-            if (isInFutureMoreThan2Days(fxRate.get().date, requestedDate)) {
+            if (isFarBackInTime(requestedDate, fxRate.get().date)) {
                 return empty();
             }
 
-            if (isFarBackInTime(fxRate.get().date, requestedDate)) {
+            if (isFarInTheFuture(fxRate.get().date, requestedDate)) {
                 skipParsing(requestedDate, fxRate.get().date, reader);
                 fxRate = parseToFxRate(reader);
                 if (fxRate.isEmpty()) {
@@ -56,19 +56,19 @@ final class FxFileReader {
         }
     }
 
-    private boolean isInFutureMoreThan2Days(LocalDate date, LocalDate inTheFuture) {
-        return date.isBefore(inTheFuture)
-            && DAYS.between(date, inTheFuture) > 2;
+    private boolean isFarBackInTime(LocalDate beforeData, LocalDate afterDate) {
+        return beforeData.isBefore(afterDate)
+            && DAYS.between(beforeData, afterDate) > 2;
     }
 
-    private boolean isFarBackInTime(LocalDate date, LocalDate backInTime) {
-        return backInTime.isBefore(date)
-            && DAYS.between(backInTime, date) > 10;
+    private boolean isFarInTheFuture(LocalDate beforeDate, LocalDate afterDate) {
+        return beforeDate.isBefore(afterDate)
+            && DAYS.between(beforeDate, afterDate) > 10;
     }
 
     private void skipParsing(LocalDate requestedDate, LocalDate date, BufferedReader reader) throws IOException {
-        final var daysBetween = DAYS.between(requestedDate, date);
-        final var weekendDays = weekendsDays(requestedDate, date);
+        final var daysBetween = DAYS.between(date, requestedDate);
+        final var weekendDays = weekendsDays(date, requestedDate);
 
         final var entriesToSkip = daysBetween - weekendDays - 2;
 
@@ -77,8 +77,8 @@ final class FxFileReader {
         }
     }
 
-    long weekendsDays(LocalDate precedeDate, LocalDate date) {
-        return precedeDate.datesUntil(date)
+    long weekendsDays(LocalDate date, LocalDate futureDate) {
+        return date.datesUntil(futureDate)
             .filter(it -> it.getDayOfWeek() == SATURDAY || it.getDayOfWeek() == SUNDAY)
             .count();
     }
