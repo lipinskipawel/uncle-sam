@@ -25,7 +25,10 @@ public final class UsdPlnRate {
         return fxFileReader.usdPlnRate(LocalDate.now())
             .orElseGet(() -> {
                 final var mid = nbpClient.currentUsdPln().rates().get(0).mid();
-                fxFileWriter.append(mid.doubleValue());
+                final var appended = fxFileWriter.append(mid.doubleValue());
+                if (!appended) {
+                    System.err.println("Could not add usd/pln rate to file");
+                }
                 return mid;
             });
     }

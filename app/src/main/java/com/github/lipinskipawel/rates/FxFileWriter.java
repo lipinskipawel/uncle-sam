@@ -20,12 +20,13 @@ final class FxFileWriter {
         this.time = requireNonNull(time);
     }
 
-    void append(double rate) {
+    boolean append(double rate) {
         try {
             final var fxLine = time.localDate() + "," + rate + "\n";
             writeString(fxPath, fxLine, CREATE, APPEND);
+            return true;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            return false;
         }
     }
 }

@@ -1,11 +1,11 @@
-package com.github.lipinskipawel;
+package com.github.lipinskipawel.cli;
 
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.github.lipinskipawel.ArgumentParser.Flag.TRANSACTION_PATH;
+import static com.github.lipinskipawel.cli.ArgumentParser.Flag.TRANSACTION_PATH;
 
 class ArgumentParserTest implements WithAssertions {
 
