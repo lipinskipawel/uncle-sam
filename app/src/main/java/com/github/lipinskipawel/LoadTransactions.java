@@ -14,11 +14,11 @@ import java.util.List;
 
 import static com.fasterxml.jackson.dataformat.csv.CsvSchema.ColumnType.NUMBER;
 import static com.fasterxml.jackson.dataformat.csv.CsvSchema.builder;
-import static com.github.lipinskipawel.Cash.cash;
-import static com.github.lipinskipawel.Currency.PLN;
-import static com.github.lipinskipawel.Currency.USD;
-import static com.github.lipinskipawel.Currency.currency;
-import static com.github.lipinskipawel.CurrencyPair.currencyPair;
+import static com.github.lipinskipawel.base.cash.Cash.cash;
+import static com.github.lipinskipawel.base.cash.Currency.PLN;
+import static com.github.lipinskipawel.base.cash.Currency.USD;
+import static com.github.lipinskipawel.base.cash.Currency.currency;
+import static com.github.lipinskipawel.base.cash.CurrencyPair.currencyPair;
 import static com.github.lipinskipawel.broker.Transaction.Builder.transaction;
 import static com.github.lipinskipawel.broker.Type.type;
 import static java.util.Objects.requireNonNull;

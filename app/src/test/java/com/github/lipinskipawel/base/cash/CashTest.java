@@ -1,9 +1,9 @@
-package com.github.lipinskipawel;
+package com.github.lipinskipawel.base.cash;
 
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
-import static com.github.lipinskipawel.Cash.cash;
+import static com.github.lipinskipawel.base.cash.Cash.cash;
 
 final class CashTest implements WithAssertions {
 

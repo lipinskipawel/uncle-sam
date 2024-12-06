@@ -1,15 +1,15 @@
-package com.github.lipinskipawel;
+package com.github.lipinskipawel.base.cash;
 
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
-import static com.github.lipinskipawel.Cash.cash;
-import static com.github.lipinskipawel.Currency.JPY;
-import static com.github.lipinskipawel.Currency.PLN;
-import static com.github.lipinskipawel.Currency.USD;
-import static com.github.lipinskipawel.CurrencyPair.currencyPair;
+import static com.github.lipinskipawel.base.cash.Cash.cash;
+import static com.github.lipinskipawel.base.cash.Currency.JPY;
+import static com.github.lipinskipawel.base.cash.Currency.PLN;
+import static com.github.lipinskipawel.base.cash.Currency.USD;
+import static com.github.lipinskipawel.base.cash.CurrencyPair.currencyPair;
 
 class CurrencyPairTest implements WithAssertions {
 

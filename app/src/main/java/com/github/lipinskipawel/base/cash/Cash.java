@@ -1,4 +1,4 @@
-package com.github.lipinskipawel;
+package com.github.lipinskipawel.base.cash;
 
 import java.math.BigDecimal;
 import java.util.Objects;

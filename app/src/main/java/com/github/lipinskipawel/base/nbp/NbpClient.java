@@ -1,4 +1,4 @@
-package com.github.lipinskipawel.nbp;
+package com.github.lipinskipawel.base.nbp;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

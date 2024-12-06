@@ -1,6 +1,6 @@
 package com.github.lipinskipawel.rates;
 
-import com.github.lipinskipawel.nbp.NbpClient;
+import com.github.lipinskipawel.base.nbp.NbpClient;
 
 import java.io.IOException;
 import java.nio.file.Path;

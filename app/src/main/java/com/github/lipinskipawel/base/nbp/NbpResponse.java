@@ -1,4 +1,4 @@
-package com.github.lipinskipawel.nbp;
+package com.github.lipinskipawel.base.nbp;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

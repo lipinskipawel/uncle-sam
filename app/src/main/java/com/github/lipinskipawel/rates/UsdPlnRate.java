@@ -1,7 +1,7 @@
 package com.github.lipinskipawel.rates;
 
-import com.github.lipinskipawel.Time;
-import com.github.lipinskipawel.nbp.NbpClient;
+import com.github.lipinskipawel.base.nbp.NbpClient;
+import com.github.lipinskipawel.base.time.Time;
 
 import java.math.BigDecimal;
 import java.nio.file.Path;

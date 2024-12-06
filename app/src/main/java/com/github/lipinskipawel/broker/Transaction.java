@@ -1,7 +1,7 @@
 package com.github.lipinskipawel.broker;
 
-import com.github.lipinskipawel.Cash;
-import com.github.lipinskipawel.CurrencyPair;
+import com.github.lipinskipawel.base.cash.Cash;
+import com.github.lipinskipawel.base.cash.CurrencyPair;
 
 import java.time.LocalDate;
 import java.util.Objects;

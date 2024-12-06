@@ -1,10 +1,10 @@
 package com.github.lipinskipawel;
 
+import com.github.lipinskipawel.base.nbp.NbpClient;
 import com.github.lipinskipawel.cli.ArgumentParser;
 import com.github.lipinskipawel.cli.UsdPlnRateUpdate;
 import com.github.lipinskipawel.cli.Valuation;
 import com.github.lipinskipawel.evaluation.AssetEvaluator;
-import com.github.lipinskipawel.nbp.NbpClient;
 import com.github.lipinskipawel.rates.FxFileWriter;
 import com.github.lipinskipawel.rates.UsdPlnRate;
 import com.github.lipinskipawel.rates.UsdPlnUpdater;
@@ -13,10 +13,10 @@ import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.time.LocalDate;
 
-import static com.github.lipinskipawel.Cash.cash;
-import static com.github.lipinskipawel.Currency.PLN;
-import static com.github.lipinskipawel.Currency.USD;
-import static com.github.lipinskipawel.CurrencyPair.currencyPair;
+import static com.github.lipinskipawel.base.cash.Cash.cash;
+import static com.github.lipinskipawel.base.cash.Currency.PLN;
+import static com.github.lipinskipawel.base.cash.Currency.USD;
+import static com.github.lipinskipawel.base.cash.CurrencyPair.currencyPair;
 
 public final class Application {
 

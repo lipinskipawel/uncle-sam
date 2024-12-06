@@ -1,6 +1,6 @@
 package com.github.lipinskipawel.rates;
 
-import com.github.lipinskipawel.Time;
+import com.github.lipinskipawel.base.time.Time;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 

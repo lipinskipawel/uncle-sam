@@ -1,6 +1,6 @@
 package com.github.lipinskipawel.rates;
 
-import com.github.lipinskipawel.Time;
+import com.github.lipinskipawel.base.time.Time;
 
 import java.io.IOException;
 import java.nio.file.Path;
