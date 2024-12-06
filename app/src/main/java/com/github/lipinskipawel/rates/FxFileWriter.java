@@ -10,12 +10,12 @@ import static java.nio.file.StandardOpenOption.APPEND;
 import static java.nio.file.StandardOpenOption.CREATE;
 import static java.util.Objects.requireNonNull;
 
-final class FxFileWriter {
+public final class FxFileWriter {
 
     private final Path fxPath;
     private final Time time;
 
-    FxFileWriter(Path fxPath, Time time) {
+    public FxFileWriter(Path fxPath, Time time) {
         this.fxPath = requireNonNull(fxPath);
         this.time = requireNonNull(time);
     }
@@ -24,6 +24,15 @@ final class FxFileWriter {
         try {
             final var fxLine = time.localDate() + "," + rate + "\n";
             writeString(fxPath, fxLine, CREATE, APPEND);
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
+    public boolean write(String data) {
+        try {
+            writeString(fxPath, data, APPEND);
             return true;
         } catch (IOException e) {
             return false;

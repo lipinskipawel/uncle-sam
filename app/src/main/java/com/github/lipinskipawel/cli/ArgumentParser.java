@@ -28,11 +28,20 @@ public final class ArgumentParser {
     }
 
     public Option option() {
-        return new Valuation(
-            findValue(TRANSACTION_PATH),
-            findValue(PRICE),
-            findValue(USD_PLN)
-        );
+        final var option = args[0];
+        if (option.equals("valuation")) {
+            return new Valuation(
+                findValue(TRANSACTION_PATH),
+                findValue(PRICE),
+                findValue(USD_PLN)
+            );
+        }
+        if (option.equals("updateRate")) {
+            return new UsdPlnRateUpdate(
+                findValue(TRANSACTION_PATH)
+            );
+        }
+        throw new RuntimeException("Unknown option defined [%s]".formatted(option));
     }
 
     Optional<String> findValue(Flag flag) {
