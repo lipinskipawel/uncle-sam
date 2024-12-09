@@ -1,87 +1,69 @@
 package com.github.lipinskipawel.base.nbp;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.github.lipinskipawel.base.nbp.ExchangeRatesSeries.Rate;
+import com.github.lipinskipawel.base.nbp.deserializer.ExchangeRatesSeriesDeserializer;
+import com.github.lipinskipawel.base.nbp.deserializer.RateDeserializer;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.time.LocalDate;
 
 import static java.net.URI.create;
 import static java.net.http.HttpClient.newBuilder;
-import static java.net.http.HttpResponse.BodySubscribers.mapping;
-import static java.net.http.HttpResponse.BodySubscribers.ofString;
-import static java.nio.charset.Charset.defaultCharset;
 
 public final class NbpClient {
 
     private static final URI BASE_NBP_URI = create("https://api.nbp.pl/api/exchangerates/");
+    public static final ObjectMapper NBP_MAPPER = createNbpMapper();
 
     private final HttpClient nbpClient;
-    private final ObjectMapper mapper;
 
     public NbpClient() {
         this.nbpClient = newBuilder().build();
-        this.mapper = createMapper();
     }
 
-    public NbpResponse currentUsdPln() {
+    public ExchangeRatesSeries currentUsdPln() {
         final var usdCurrentRate = HttpRequest.newBuilder()
-            .uri(BASE_NBP_URI.resolve("rates/a/usd"))
+            .uri(BASE_NBP_URI.resolve("rates/A/USD"))
             .GET()
             .header("Accept", "application/json")
             .build();
         try {
-            return nbpClient.send(usdCurrentRate, new CustomHandler()).body();
+            return nbpClient.send(usdCurrentRate, new ExchangeBodyHandler()).body();
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public NbpResponse usdPln30days(LocalDate from) {
+    public ExchangeRatesSeries usdPln30days(LocalDate from) {
         final var request = HttpRequest.newBuilder()
-            .uri(BASE_NBP_URI.resolve("rates/a/usd/%s/%s".formatted(from, from.plusDays(30))))
+            .uri(BASE_NBP_URI.resolve("rates/A/USD/%s/%s".formatted(from, from.plusDays(30))))
             .GET()
             .header("Accept", "application/json")
             .build();
         try {
-            return nbpClient.send(request, new CustomHandler()).body();
+            return nbpClient.send(request, new ExchangeBodyHandler()).body();
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
 
-    class CustomHandler implements HttpResponse.BodyHandler<NbpResponse> {
-
-        @Override
-        public HttpResponse.BodySubscriber<NbpResponse> apply(HttpResponse.ResponseInfo responseInfo) {
-            return mapping(
-                ofString(defaultCharset()),
-                body -> {
-                    try {
-                        return mapper.readValue(body, NbpResponse.class);
-                    } catch (JsonProcessingException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            );
-        }
-    }
-
-    private ObjectMapper createMapper() {
+    private static ObjectMapper createNbpMapper() {
         final var mapper = new ObjectMapper();
 
         mapper
             .registerModule(new JavaTimeModule())
             .registerModule(new Jdk8Module())
             .registerModule(new SimpleModule()
-                .addDeserializer(NbpResponse.class, new NbpResponseDeserializer()));
+                .addDeserializer(ExchangeRatesSeries.class, new ExchangeRatesSeriesDeserializer())
+                .addDeserializer(Rate.class, new RateDeserializer())
+            );
 
         return mapper;
     }

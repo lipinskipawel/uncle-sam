@@ -1,23 +1,23 @@
-package com.github.lipinskipawel.base.nbp;
+package com.github.lipinskipawel.base.nbp.deserializer;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.github.lipinskipawel.base.nbp.NbpResponse.Rate;
+import com.github.lipinskipawel.base.nbp.ExchangeRatesSeries;
+import com.github.lipinskipawel.base.nbp.ExchangeRatesSeries.Rate;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.github.lipinskipawel.base.nbp.NbpResponse.Builder.nbpResponse;
+import static com.github.lipinskipawel.base.nbp.ExchangeRatesSeries.Builder.exchangeRatesSeries;
 
-// {"table":"A","currency":"dolar amerykański","code":"USD","rates":[{"no":"228/A/NBP/2024","effectiveDate":"2024-11-25","mid":4.1297}]}
-public final class NbpResponseDeserializer extends JsonDeserializer<NbpResponse> {
+public final class ExchangeRatesSeriesDeserializer extends JsonDeserializer<ExchangeRatesSeries> {
 
     @Override
-    public NbpResponse deserialize(JsonParser parser, DeserializationContext dctx) throws IOException {
+    public ExchangeRatesSeries deserialize(JsonParser parser, DeserializationContext dctx) throws IOException {
         final JsonNode tree = parser.getCodec().readTree(parser);
 
         final var table = tree.get("table").asText();
@@ -25,7 +25,7 @@ public final class NbpResponseDeserializer extends JsonDeserializer<NbpResponse>
         final var code = tree.get("code").asText();
         final var rates = parseList(dctx, tree);
 
-        return nbpResponse()
+        return exchangeRatesSeries()
             .table(table)
             .currency(currency)
             .code(code)
