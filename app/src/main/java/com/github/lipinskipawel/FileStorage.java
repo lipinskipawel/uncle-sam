@@ -8,24 +8,25 @@ import static java.util.Optional.ofNullable;
 
 public final class FileStorage {
 
-    public Optional<Path> transactions() {
-        return ofNullable(getenv("HOME"))
-            .map(Path::of)
-            .map(path -> path.resolve(".config"))
-            .map(path -> path.resolve("uncle-sam"))
+    public Path transactions() {
+        return basePath()
             .map(path -> path.resolve("exchange"))
-            .map(path -> path.resolve("vuaa.uk.txt"))
-            .filter(path -> path.toFile().exists() && path.toFile().isFile());
+            .map(path -> path.resolve("vuaa.uk.csv"))
+            .orElseThrow();
     }
 
-    public Path usdPlnPath() {
+    public Path usdPln() {
+        return basePath()
+            .map(path -> path.resolve("rates"))
+            .map(path -> path.resolve("usdPln.csv"))
+            .orElseThrow();
+    }
+
+    private Optional<Path> basePath() {
         return ofNullable(getenv("HOME"))
             .or(() -> Optional.of("/"))
             .map(Path::of)
             .map(path -> path.resolve(".config"))
-            .map(path -> path.resolve("uncle-sam"))
-            .map(path -> path.resolve("rates"))
-            .map(path -> path.resolve("usdPln.txt"))
-            .orElseThrow();
+            .map(path -> path.resolve("uncle-sam"));
     }
 }

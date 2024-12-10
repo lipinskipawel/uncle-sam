@@ -11,7 +11,7 @@ class ArgumentParserTest implements WithAssertions {
 
     @Test
     void find_transaction_in_args_when_provided() {
-        final var arguments = List.of("transactions=/home/me/txt.csv", "some=error").toArray(String[]::new);
+        final var arguments = List.of("transactions=/home/me/txn.csv", "some=error").toArray(String[]::new);
         final var parser = new ArgumentParser(arguments);
 
         final var path = parser.findValue(TRANSACTION_PATH);
@@ -19,12 +19,12 @@ class ArgumentParserTest implements WithAssertions {
         assertThat(path)
             .isPresent()
             .get()
-            .isEqualTo("/home/me/txt.csv");
+            .isEqualTo("/home/me/txn.csv");
     }
 
     @Test
     void does_not_find_transaction_in_args_when_missing() {
-        final var arguments = List.of("t=/home/me/txt.csv", "some=error").toArray(String[]::new);
+        final var arguments = List.of("t=/home/me/txn.csv", "some=error").toArray(String[]::new);
         final var parser = new ArgumentParser(arguments);
 
         final var path = parser.findValue(TRANSACTION_PATH);

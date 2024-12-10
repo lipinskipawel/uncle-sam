@@ -17,6 +17,7 @@ import static com.github.lipinskipawel.base.cash.Cash.cash;
 import static com.github.lipinskipawel.base.cash.Currency.PLN;
 import static com.github.lipinskipawel.base.cash.Currency.USD;
 import static com.github.lipinskipawel.base.cash.CurrencyPair.currencyPair;
+import static java.util.Optional.of;
 
 public final class Application {
 
@@ -27,12 +28,12 @@ public final class Application {
         switch (option) {
             case Valuation valuation -> {
                 final var fileStorage = new FileStorage();
-                final var usdPlnRate = new UsdPlnRate(new NbpClient(), fileStorage.usdPlnPath(), LocalDate::now);
+                final var usdPlnRate = new UsdPlnRate(new NbpClient(), fileStorage.usdPln(), LocalDate::now);
 
-                final var transactionPath = fileStorage.transactions()
-                    .or(() -> valuation.transactionPath()
-                        .map(Path::of))
-                    .orElseThrow(() -> new RuntimeException("Path to transactions have not been specified"));
+                final var transactionPath = valuation.transactionPath()
+                    .map(Path::of)
+                    .or(() -> of(fileStorage.transactions()))
+                    .orElseThrow(() -> new RuntimeException("Specify path to transactions or put them under $HOME/.config/uncle-sam/exchange"));
                 final var loadTransactions = new LoadTransactions(transactionPath);
 
                 final var assetEvaluator = new AssetEvaluator(loadTransactions.loadTransactions());
@@ -52,18 +53,18 @@ public final class Application {
             case UsdPlnRateUpdate updateRate -> {
                 final var fileStorage = new FileStorage();
 
-                final var transactionPath = fileStorage.transactions()
-                    .or(() -> updateRate.transactionPath()
-                        .map(Path::of))
-                    .orElseThrow(() -> new RuntimeException("Path to transactions have not been specified"));
+                final var transactionPath = updateRate.transactionPath()
+                    .map(Path::of)
+                    .or(() -> of(fileStorage.transactions()))
+                    .orElseThrow(() -> new RuntimeException("Specify path to transactions or put them under $HOME/.config/uncle-sam/exchange"));
                 final var loadTransactions = new LoadTransactions(transactionPath);
 
                 final var firstTransaction = loadTransactions.loadTransactions().get(0);
                 final var transactionDate = firstTransaction.localDate();
 
                 final var usdPlnUpdater = new UsdPlnUpdater(
-                    fileStorage.usdPlnPath(),
-                    new FxFileWriter(fileStorage.usdPlnPath(), LocalDate::now),
+                    fileStorage.usdPln(),
+                    new FxFileWriter(fileStorage.usdPln(), LocalDate::now),
                     new NbpClient(),
                     transactionDate
                 );

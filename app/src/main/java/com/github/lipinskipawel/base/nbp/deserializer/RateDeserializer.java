@@ -16,7 +16,7 @@ import static java.time.LocalDate.parse;
 public final class RateDeserializer extends JsonDeserializer<Rate> {
 
     @Override
-    public Rate deserialize(JsonParser parser, DeserializationContext dctxt) throws IOException {
+    public Rate deserialize(JsonParser parser, DeserializationContext dctx) throws IOException {
         final JsonNode tree = parser.getCodec().readTree(parser);
 
         final var no = tree.get("no").asText();
