@@ -1,6 +1,8 @@
 package com.github.lipinskipawel.evaluation;
 
 import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -45,5 +47,65 @@ class AssetEvaluatorTest implements WithAssertions {
         final var numberOfShares = portfolioEvaluation.numberOfShares();
 
         assertThat(numberOfShares).isEqualTo(21);
+    }
+
+    @Nested
+    @DisplayName("Correctly compute invested cash")
+    class InvestedCash {
+
+        @Test
+        @DisplayName("when only BUY transactions are present")
+        void buy_transactions() {
+            final var transactions = List.of(
+                buyTransaction()
+                    .price(cash("105", USD))
+                    .volume(21)
+                    .localDate(LocalDate.of(2024, 7, 3))
+                    .fxRate(currencyPair(PLN, new BigDecimal("4.00"), USD))
+                    .build(),
+                buyTransaction()
+                    .price(cash(100, USD))
+                    .volume(9)
+                    .localDate(LocalDate.of(2024, 7, 24))
+                    .fxRate(currencyPair(PLN, new BigDecimal("4"), USD))
+                    .build()
+            );
+            final var evaluator = new AssetEvaluator(transactions);
+
+            final var cash = evaluator.investedCash();
+
+            assertThat(cash).isEqualTo(cash(3105, USD));
+        }
+
+        @Test
+        @DisplayName("when BUY and SELL transactions are present")
+        void buy_and_sell_transactions() {
+            final var transactions = List.of(
+                buyTransaction()
+                    .price(cash("105", USD))
+                    .volume(21)
+                    .localDate(LocalDate.of(2024, 7, 3))
+                    .fxRate(currencyPair(PLN, new BigDecimal("4.00"), USD))
+                    .build(),
+                buyTransaction()
+                    .price(cash(100, USD))
+                    .volume(9)
+                    .localDate(LocalDate.of(2024, 7, 24))
+                    .fxRate(currencyPair(PLN, new BigDecimal("4"), USD))
+                    .build(),
+                transaction()
+                    .type(SELL)
+                    .price(cash(100, USD))
+                    .volume(9)
+                    .localDate(LocalDate.of(2024, 7, 24))
+                    .fxRate(currencyPair(PLN, new BigDecimal("4"), USD))
+                    .build()
+            );
+            final var evaluator = new AssetEvaluator(transactions);
+
+            final var cash = evaluator.investedCash();
+
+            assertThat(cash).isEqualTo(cash(2205, USD));
+        }
     }
 }

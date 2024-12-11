@@ -5,6 +5,7 @@ import com.github.lipinskipawel.cli.ArgumentParser;
 import com.github.lipinskipawel.cli.UsdPlnRateUpdate;
 import com.github.lipinskipawel.cli.Valuation;
 import com.github.lipinskipawel.evaluation.AssetEvaluator;
+import com.github.lipinskipawel.evaluation.PrettyPrint;
 import com.github.lipinskipawel.rates.FxFileWriter;
 import com.github.lipinskipawel.rates.UsdPlnRate;
 import com.github.lipinskipawel.rates.UsdPlnUpdater;
@@ -37,18 +38,20 @@ public final class Application {
                 final var loadTransactions = new LoadTransactions(transactionPath);
 
                 final var assetEvaluator = new AssetEvaluator(loadTransactions.loadTransactions());
+                final var investedCash = assetEvaluator.investedCash();
                 final var numberOfShares = assetEvaluator.numberOfShares();
 
                 final var currentAssetPrice = valuation.assetPrice()
                     .map(it -> cash(it, USD))
                     .orElse(cash(100, USD));
-                System.out.println(currentAssetPrice.multiply(numberOfShares));
 
                 final var inPln = valuation.usdPlnRate()
                     .map(it -> currencyPair(USD, new BigDecimal(it), PLN))
                     .map(it -> it.exchange(currentAssetPrice.multiply(numberOfShares)))
                     .orElseGet(() -> currencyPair(USD, usdPlnRate.currentUsdPln(), PLN).exchange(currentAssetPrice.multiply(numberOfShares)));
-                System.out.println(inPln);
+
+                final var prettyPrint = new PrettyPrint();
+                prettyPrint.prettyPrint(investedCash, usdPlnRate, currentAssetPrice, numberOfShares, inPln);
             }
             case UsdPlnRateUpdate updateRate -> {
                 final var fileStorage = new FileStorage();
