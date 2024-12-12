@@ -18,6 +18,7 @@ import static com.github.lipinskipawel.base.cash.Cash.cash;
 import static com.github.lipinskipawel.base.cash.Currency.PLN;
 import static com.github.lipinskipawel.base.cash.Currency.USD;
 import static com.github.lipinskipawel.base.cash.CurrencyPair.currencyPair;
+import static com.github.lipinskipawel.evaluation.InvestedCash.investedCash;
 import static java.util.Optional.of;
 
 public final class Application {
@@ -45,13 +46,14 @@ public final class Application {
                     .map(it -> cash(it, USD))
                     .orElse(cash(100, USD));
 
+                final var inUsd = currentAssetPrice.multiply(numberOfShares);
                 final var inPln = valuation.usdPlnRate()
                     .map(it -> currencyPair(USD, new BigDecimal(it), PLN))
                     .map(it -> it.exchange(currentAssetPrice.multiply(numberOfShares)))
-                    .orElseGet(() -> currencyPair(USD, usdPlnRate.currentUsdPln(), PLN).exchange(currentAssetPrice.multiply(numberOfShares)));
+                    .orElseGet(() -> currencyPair(USD, usdPlnRate.currentUsdPln(), PLN).exchange(inUsd));
 
                 final var prettyPrint = new PrettyPrint();
-                prettyPrint.prettyPrint(investedCash, usdPlnRate, currentAssetPrice, numberOfShares, inPln);
+                prettyPrint.prettyPrint(investedCash, investedCash(inUsd, inPln));
             }
             case UsdPlnRateUpdate updateRate -> {
                 final var fileStorage = new FileStorage();

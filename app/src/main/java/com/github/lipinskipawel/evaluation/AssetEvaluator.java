@@ -5,8 +5,6 @@ import com.github.lipinskipawel.broker.Transaction;
 
 import java.util.List;
 
-import static com.github.lipinskipawel.base.cash.Cash.cash;
-import static com.github.lipinskipawel.base.cash.Currency.USD;
 import static com.github.lipinskipawel.broker.Type.BUY;
 import static java.util.Objects.requireNonNull;
 
@@ -17,14 +15,23 @@ public final class AssetEvaluator {
         this.transactions = requireNonNull(transactions);
     }
 
-    public Cash investedCash() {
+    public InvestedCash investedCash() {
         return transactions
             .stream()
             .map(it -> {
-                final var amount = it.amount().multiply(it.volume()).amount();
-                return it.type() == BUY ? cash(amount.toString(), USD) : cash(amount.negate().toString(), USD);
+                final var inUsd = cashMovement(it);
+                final var inPln = it.fxRate().exchange(inUsd);
+                return InvestedCash.investedCash(inUsd, inPln);
             })
-            .reduce(cash(0, USD), Cash::add);
+            .reduce(InvestedCash.investedCash(), InvestedCash::addInvestedCash, InvestedCash::addInvestedCash);
+    }
+
+    private Cash cashMovement(Transaction transaction) {
+        final var cash = transaction.amount().multiply(transaction.volume());
+        return switch (transaction.type()) {
+            case BUY -> cash;
+            case SELL -> cash.negate();
+        };
     }
 
     public int numberOfShares() {

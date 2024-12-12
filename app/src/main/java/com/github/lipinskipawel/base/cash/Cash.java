@@ -48,6 +48,10 @@ public final class Cash {
         return new Cash(this.amount.multiply(BigDecimal.valueOf(multiplier)), this.currency);
     }
 
+    public Cash negate() {
+        return new Cash(this.amount.negate(), this.currency);
+    }
+
     public BigDecimal amount() {
         return amount;
     }

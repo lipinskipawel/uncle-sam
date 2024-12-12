@@ -16,6 +16,7 @@ import static com.github.lipinskipawel.base.cash.CurrencyPair.currencyPair;
 import static com.github.lipinskipawel.broker.Transaction.Builder.buyTransaction;
 import static com.github.lipinskipawel.broker.Transaction.Builder.transaction;
 import static com.github.lipinskipawel.broker.Type.SELL;
+import static com.github.lipinskipawel.evaluation.InvestedCash.investedCash;
 
 class AssetEvaluatorTest implements WithAssertions {
 
@@ -72,9 +73,9 @@ class AssetEvaluatorTest implements WithAssertions {
             );
             final var evaluator = new AssetEvaluator(transactions);
 
-            final var cash = evaluator.investedCash();
+            final var investedCash = evaluator.investedCash();
 
-            assertThat(cash).isEqualTo(cash(3105, USD));
+            assertThat(investedCash).isEqualTo(investedCash(cash(3105, USD), cash("776.25", PLN)));
         }
 
         @Test
@@ -103,9 +104,9 @@ class AssetEvaluatorTest implements WithAssertions {
             );
             final var evaluator = new AssetEvaluator(transactions);
 
-            final var cash = evaluator.investedCash();
+            final var investedCash = evaluator.investedCash();
 
-            assertThat(cash).isEqualTo(cash(2205, USD));
+            assertThat(investedCash).isEqualTo(investedCash(cash(2205, USD), cash("551.25", PLN)));
         }
     }
 }

@@ -1,31 +1,22 @@
 package com.github.lipinskipawel.evaluation;
 
-import com.github.lipinskipawel.base.cash.Cash;
-import com.github.lipinskipawel.rates.UsdPlnRate;
-
-import static com.github.lipinskipawel.base.cash.Currency.PLN;
-import static com.github.lipinskipawel.base.cash.Currency.USD;
-import static com.github.lipinskipawel.base.cash.CurrencyPair.currencyPair;
-
 public final class PrettyPrint {
 
-    public void prettyPrint(Cash investedCash, UsdPlnRate usdPlnRate, Cash currentAssetPrice, int numberOfShares, Cash inPln) {
+    public void prettyPrint(InvestedCash investedCash, InvestedCash valuation) {
         System.out.println("Invested cash");
-        System.out.println(investedCash);
-        final var investedPln = currencyPair(USD, usdPlnRate.currentUsdPln(), PLN).exchange(investedCash);
-        System.out.println(investedPln);
+        System.out.println(investedCash.inUsd());
+        System.out.println(investedCash.inPln());
         System.out.println("");
         System.out.println("Valuation");
-        final var valuationUsd = currentAssetPrice.multiply(numberOfShares);
-        System.out.println(valuationUsd);
-        System.out.println(inPln);
+        System.out.println(valuation.inUsd());
+        System.out.println(valuation.inPln());
         System.out.println("");
         System.out.println("Profit / Loss");
-        final var difference = valuationUsd.minus(investedCash);
-        final var percentage = difference.multiply(100).divide(investedCash);
+        final var difference = valuation.inUsd().minus(investedCash.inUsd());
+        final var percentage = difference.multiply(100).divide(investedCash.inUsd());
         System.out.println(difference + " -- " + percentage + "%");
-        final var plnDifference = inPln.minus(investedPln);
-        final var plnPercentage = plnDifference.multiply(100).divide(investedPln);
+        final var plnDifference = valuation.inPln().minus(investedCash.inPln());
+        final var plnPercentage = plnDifference.multiply(100).divide(investedCash.inPln());
         System.out.println(plnDifference + " -- " + plnPercentage + "%");
     }
 }

@@ -40,7 +40,7 @@ public final class Transaction {
         return volume;
     }
 
-    public CurrencyPair gxRate() {
+    public CurrencyPair fxRate() {
         return fxRate;
     }
 
