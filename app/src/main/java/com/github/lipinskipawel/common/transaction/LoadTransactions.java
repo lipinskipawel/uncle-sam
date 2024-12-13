@@ -1,9 +1,8 @@
-package com.github.lipinskipawel;
+package com.github.lipinskipawel.common.transaction;
 
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
-import com.github.lipinskipawel.broker.Transaction;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -19,8 +18,8 @@ import static com.github.lipinskipawel.base.cash.Currency.PLN;
 import static com.github.lipinskipawel.base.cash.Currency.USD;
 import static com.github.lipinskipawel.base.cash.Currency.currency;
 import static com.github.lipinskipawel.base.cash.CurrencyPair.currencyPair;
-import static com.github.lipinskipawel.broker.Transaction.Builder.transaction;
-import static com.github.lipinskipawel.broker.Type.type;
+import static com.github.lipinskipawel.common.transaction.Transaction.Builder.transaction;
+import static com.github.lipinskipawel.common.transaction.Type.type;
 import static java.util.Objects.requireNonNull;
 
 public final class LoadTransactions {

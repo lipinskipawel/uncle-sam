@@ -1,6 +1,7 @@
-package com.github.lipinskipawel.rates;
+package com.github.lipinskipawel.rate;
 
 import com.github.lipinskipawel.base.nbp.NbpClient;
+import com.github.lipinskipawel.common.files.FxFileWriter;
 
 import java.io.IOException;
 import java.nio.file.Path;

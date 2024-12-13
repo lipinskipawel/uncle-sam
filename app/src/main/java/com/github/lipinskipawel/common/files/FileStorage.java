@@ -1,4 +1,4 @@
-package com.github.lipinskipawel;
+package com.github.lipinskipawel.common.files;
 
 import java.nio.file.Path;
 import java.util.Optional;

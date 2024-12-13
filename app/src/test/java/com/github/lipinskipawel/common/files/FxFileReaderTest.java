@@ -1,4 +1,4 @@
-package com.github.lipinskipawel.rates;
+package com.github.lipinskipawel.common.files;
 
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;

@@ -1,11 +1,11 @@
-package com.github.lipinskipawel.evaluation;
+package com.github.lipinskipawel.valuation;
 
 import com.github.lipinskipawel.base.cash.Cash;
-import com.github.lipinskipawel.broker.Transaction;
+import com.github.lipinskipawel.common.transaction.Transaction;
 
 import java.util.List;
 
-import static com.github.lipinskipawel.broker.Type.BUY;
+import static com.github.lipinskipawel.common.transaction.Type.BUY;
 import static java.util.Objects.requireNonNull;
 
 public final class AssetEvaluator {

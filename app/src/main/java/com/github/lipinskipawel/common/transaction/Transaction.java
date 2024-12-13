@@ -1,4 +1,4 @@
-package com.github.lipinskipawel.broker;
+package com.github.lipinskipawel.common.transaction;
 
 import com.github.lipinskipawel.base.cash.Cash;
 import com.github.lipinskipawel.base.cash.CurrencyPair;
@@ -6,7 +6,6 @@ import com.github.lipinskipawel.base.cash.CurrencyPair;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import static com.github.lipinskipawel.broker.Type.BUY;
 import static java.util.Objects.requireNonNull;
 
 public final class Transaction {
@@ -87,7 +86,7 @@ public final class Transaction {
         }
 
         public static Builder buyTransaction() {
-            return new Builder().type(BUY);
+            return new Builder().type(Type.BUY);
         }
 
         public Builder type(Type type) {

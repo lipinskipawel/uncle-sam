@@ -1,4 +1,4 @@
-package com.github.lipinskipawel.broker;
+package com.github.lipinskipawel.common.transaction;
 
 public enum Type {
     BUY,

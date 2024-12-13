@@ -1,4 +1,4 @@
-package com.github.lipinskipawel.rates;
+package com.github.lipinskipawel.common.files;
 
 import java.io.BufferedReader;
 import java.io.IOException;

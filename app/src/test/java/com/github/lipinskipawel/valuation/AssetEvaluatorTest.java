@@ -1,4 +1,4 @@
-package com.github.lipinskipawel.evaluation;
+package com.github.lipinskipawel.valuation;
 
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.DisplayName;
@@ -13,10 +13,10 @@ import static com.github.lipinskipawel.base.cash.Cash.cash;
 import static com.github.lipinskipawel.base.cash.Currency.PLN;
 import static com.github.lipinskipawel.base.cash.Currency.USD;
 import static com.github.lipinskipawel.base.cash.CurrencyPair.currencyPair;
-import static com.github.lipinskipawel.broker.Transaction.Builder.buyTransaction;
-import static com.github.lipinskipawel.broker.Transaction.Builder.transaction;
-import static com.github.lipinskipawel.broker.Type.SELL;
-import static com.github.lipinskipawel.evaluation.InvestedCash.investedCash;
+import static com.github.lipinskipawel.common.transaction.Transaction.Builder.buyTransaction;
+import static com.github.lipinskipawel.common.transaction.Transaction.Builder.transaction;
+import static com.github.lipinskipawel.common.transaction.Type.SELL;
+import static com.github.lipinskipawel.valuation.InvestedCash.investedCash;
 
 class AssetEvaluatorTest implements WithAssertions {
 

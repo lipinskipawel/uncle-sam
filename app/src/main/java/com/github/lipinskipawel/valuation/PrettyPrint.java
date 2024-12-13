@@ -1,4 +1,4 @@
-package com.github.lipinskipawel.evaluation;
+package com.github.lipinskipawel.valuation;
 
 public final class PrettyPrint {
 

@@ -1,4 +1,4 @@
-package com.github.lipinskipawel.rates;
+package com.github.lipinskipawel.common.files;
 
 import com.github.lipinskipawel.base.time.Time;
 import org.assertj.core.api.WithAssertions;

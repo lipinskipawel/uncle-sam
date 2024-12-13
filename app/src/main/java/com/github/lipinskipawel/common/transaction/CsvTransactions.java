@@ -1,4 +1,4 @@
-package com.github.lipinskipawel;
+package com.github.lipinskipawel.common.transaction;
 
 public final class CsvTransactions {
     public String type;

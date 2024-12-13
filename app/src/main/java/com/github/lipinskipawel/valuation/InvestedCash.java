@@ -1,4 +1,4 @@
-package com.github.lipinskipawel.evaluation;
+package com.github.lipinskipawel.valuation;
 
 import com.github.lipinskipawel.base.cash.Cash;
 
