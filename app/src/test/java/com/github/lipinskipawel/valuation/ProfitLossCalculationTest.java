@@ -22,7 +22,7 @@ class ProfitLossCalculationTest implements WithAssertions {
             arguments(cash(10_000, USD), cash(20_000, USD), new ProfitLoss(cash(10_000, USD), 100)),
             arguments(cash(10_000, USD), cash(11_000, USD), new ProfitLoss(cash(1_000, USD), 10)),
             arguments(cash(10_000, USD), cash(10_500, USD), new ProfitLoss(cash(500, USD), 5)),
-            arguments(cash(10_000, USD), cash(10_130, USD), new ProfitLoss(cash(130, USD), 1))
+            arguments(cash(10_000, USD), cash(10_130, USD), new ProfitLoss(cash(130, USD), 1.3))
         );
     }
 
@@ -39,7 +39,7 @@ class ProfitLossCalculationTest implements WithAssertions {
             arguments(cash(10_000, USD), cash(0, USD), new ProfitLoss(cash(-10_000, USD), -100)),
             arguments(cash(10_000, USD), cash(9_000, USD), new ProfitLoss(cash(-1_000, USD), -10)),
             arguments(cash(10_000, USD), cash(9_500, USD), new ProfitLoss(cash(-500, USD), -5)),
-            arguments(cash(10_000, USD), cash(9_870, USD), new ProfitLoss(cash(-130, USD), -1))
+            arguments(cash(10_000, USD), cash(9_870, USD), new ProfitLoss(cash(-130, USD), -1.3))
         );
     }
 

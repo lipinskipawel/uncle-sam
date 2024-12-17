@@ -15,7 +15,7 @@ final class ProfitLossCalculation {
 
     ProfitLoss profitLoss(Cash baseline, Cash cash) {
         final var difference = cash.minus(baseline);
-        final var percentage = difference.multiply(100).divide(baseline).amount().doubleValue();
+        final var percentage = difference.multiply(100).divideExact(baseline).amount().doubleValue();
 
         return new ProfitLoss(difference, percentage);
     }

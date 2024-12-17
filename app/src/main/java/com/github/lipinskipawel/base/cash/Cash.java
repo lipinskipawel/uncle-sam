@@ -44,6 +44,13 @@ public final class Cash {
         return new Cash(amount.divide(cash.amount, HALF_DOWN), currency);
     }
 
+    public Cash divideExact(Cash cash) {
+        if (currency != cash.currency) {
+            throw new RuntimeException("Currencies must be the same");
+        }
+        return new Cash(amount.divide(cash.amount), currency);
+    }
+
     public Cash multiply(int multiplier) {
         return new Cash(this.amount.multiply(BigDecimal.valueOf(multiplier)), this.currency);
     }
